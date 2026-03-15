@@ -1,0 +1,14 @@
+subgraphs:
+  resultat-service:
+    routing_url: http://localhost:4002
+    schema:
+      file: resultat-service/src/main/resources/schema.graphql
+  person-service:
+    routing_url: http://localhost:4001
+    schema:
+      file: person-service/src/main/resources/schema.graphql
+  deling-service:
+    routing_url: http://localhost:4003
+    schema:
+      file: deling-service/src/main/resources/schema.graphql
+federation_version: =2.10.0

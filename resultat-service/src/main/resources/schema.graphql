@@ -1,0 +1,106 @@
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.10", import: ["@key"])
+
+"""Spørringer for å hente akademiske resultater."""
+type Query {
+  """Hent et enkelt resultat basert på unik ID."""
+  resultat(id: ID!): Resultat
+
+  """Hent alle resultater for en gitt person."""
+  resultater(personId: ID!): [Resultat!]!
+}
+
+"""Et akademisk resultat — vitnemål, karakterutskrift eller kompetansebevis — utstedt av en institusjon."""
+type Resultat @key(fields: "id") {
+  """Unik identifikator for resultatet."""
+  id: ID!
+
+  """Kategori: vitnemål, karakterutskrift eller kompetansebevis."""
+  kategori: ResultatKategori!
+
+  """Nåværende status for resultatet."""
+  status: ResultatStatus!
+
+  """Dato resultatet ble utstedt (ISO 8601-format)."""
+  utstedtDato: String
+
+  """Utdanningsinstitusjonen som utstedte resultatet."""
+  institusjon: Institusjon!
+
+  """Graden knyttet til resultatet, hvis relevant."""
+  grad: Grad
+
+  """Emner (fag) som inngår i resultatet."""
+  emner: [Emne!]!
+}
+
+"""En norsk utdanningsinstitusjon som utsteder akademiske resultater."""
+type Institusjon @key(fields: "id") {
+  """Unik identifikator for institusjonen."""
+  id: ID!
+
+  """Fullt navn på institusjonen."""
+  navn: String!
+
+  """Kort forkortelse (f.eks. UiO, NTNU)."""
+  kortnavn: String
+
+  """Landkode (ISO 3166-1 alpha-2, f.eks. NO)."""
+  land: String!
+}
+
+"""Akademisk grad knyttet til et resultat."""
+type Grad {
+  """Unik identifikator for graden."""
+  id: ID!
+
+  """Gradens tittel (f.eks. Bachelor i informatikk)."""
+  tittel: String!
+
+  """Gradsnivå (f.eks. bachelor, master, phd)."""
+  nivaa: String!
+}
+
+"""Et enkelt emne (fag) med karakter og studiepoeng."""
+type Emne {
+  """Unik identifikator for emnet."""
+  id: ID!
+
+  """Emnekode (f.eks. INF1000, MAT1100)."""
+  emnekode: String!
+
+  """Fullt navn på emnet."""
+  emnenavn: String!
+
+  """Karakter oppnådd (A-F eller Bestått/Ikke bestått)."""
+  karakter: String!
+
+  """Antall studiepoeng for emnet."""
+  studiepoeng: Int!
+
+  """Dato emnet ble fullført (ISO 8601-format)."""
+  dato: String
+}
+
+"""Kategorisering av akademiske resultater."""
+enum ResultatKategori {
+  """Offisielt dokument for fullført grad/studieprogram."""
+  VITNEMAAL
+
+  """Liste over alle emner og karakterer."""
+  KARAKTERUTSKRIFT
+
+  """Bevis på oppnådd kompetanse (Kompetanse Norge)."""
+  KOMPETANSEBEVIS
+}
+
+"""Gyldighetsstatusen til et akademisk resultat."""
+enum ResultatStatus {
+  """Resultatet er gyldig og aktivt."""
+  GYLDIG
+
+  """Resultatet er trukket tilbake av utstedende institusjon."""
+  TRUKKET_TILBAKE
+
+  """Resultatet er under behandling og ikke ferdigstilt."""
+  UNDER_BEHANDLING
+}
