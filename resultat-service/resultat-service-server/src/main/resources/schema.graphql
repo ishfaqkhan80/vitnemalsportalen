@@ -6,11 +6,11 @@ type Query {
   resultat(id: ID!): Resultat
 
   """Hent alle resultater for en gitt person."""
-  resultater(personId: ID!): [Resultat!]!
+  resultater(personId: ID! @field(name: "PERSON_ID")): [Resultat!]!
 }
 
 """Et akademisk resultat — vitnemål, karakterutskrift eller kompetansebevis — utstedt av en institusjon."""
-type Resultat @key(fields: "id") {
+type Resultat @key(fields: "id") @table {
   """Unik identifikator for resultatet."""
   id: ID!
 
@@ -21,20 +21,20 @@ type Resultat @key(fields: "id") {
   status: ResultatStatus!
 
   """Dato resultatet ble utstedt (ISO 8601-format)."""
-  utstedtDato: String
+  utstedtDato: String @field(name: "UTSTEDT_DATO")
 
   """Utdanningsinstitusjonen som utstedte resultatet."""
   institusjon: Institusjon!
 
   """Graden knyttet til resultatet, hvis relevant."""
-  grad: Grad
+  grad: Grad @splitQuery
 
   """Emner (fag) som inngår i resultatet."""
-  emner: [Emne!]!
+  emner: [Emne!]! @splitQuery
 }
 
 """En norsk utdanningsinstitusjon som utsteder akademiske resultater."""
-type Institusjon @key(fields: "id") {
+type Institusjon @key(fields: "id") @table {
   """Unik identifikator for institusjonen."""
   id: ID!
 
@@ -49,7 +49,7 @@ type Institusjon @key(fields: "id") {
 }
 
 """Akademisk grad knyttet til et resultat."""
-type Grad {
+type Grad @table {
   """Unik identifikator for graden."""
   id: ID!
 
@@ -61,7 +61,7 @@ type Grad {
 }
 
 """Et enkelt emne (fag) med karakter og studiepoeng."""
-type Emne {
+type Emne @table {
   """Unik identifikator for emnet."""
   id: ID!
 

@@ -2,13 +2,6 @@ subgraphs:
   resultat-service:
     routing_url: http://localhost:4002
     schema:
-      file: resultat-service/src/main/resources/schema.graphql
-  person-service:
-    routing_url: http://localhost:4001
-    schema:
-      file: person-service/src/main/resources/schema.graphql
-  deling-service:
-    routing_url: http://localhost:4003
-    schema:
-      file: deling-service/src/main/resources/schema.graphql
+      file: resultat-service/resultat-service-server/src/main/resources/schema.graphql
+  # person-service og deling-service legges til når de bygges (Fase 3 og 4)
 federation_version: =2.10.0
